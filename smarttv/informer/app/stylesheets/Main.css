@@ -1,0 +1,90 @@
+/* Layout */
+body
+{
+	width: 960px;
+	height: 540px;
+font-color:white;
+background-image:url(./bg.jpg);
+}
+
+
+*
+{
+	padding: 0;
+	margin: 0;
+	border: 0;
+	
+}
+
+#rate{
+
+ position:absolute;
+ top:130px;
+ color:green;
+ left:414px;
+ font-weight:bolder;
+ font-size:16px;
+ 
+}
+
+#dt{
+
+ position:absolute;
+ top:132px;
+ color:yellow;
+ left:525px;
+ font-weight:bolder;
+ 
+}
+
+
+#wls{
+
+ position:absolute;
+ top:171px;
+ color:yellow;
+ left:410px;
+ font-weight:bold;
+ 
+}
+
+#vests{
+
+ position:absolute;
+ top:200px;
+ color:yellow;
+ left:410px;
+ font-weight:bold;
+ 
+}
+
+
+#vpwr{
+
+ position:absolute;
+ top:285px;
+ color:green;
+ left:570px;
+ font-weight:bolder;
+ font-size:14px;
+}
+
+#slider{
+    position:absolute;
+    top:285px;
+    left:390px;
+    width:164px;
+    height:18px;
+}
+
+#informer{
+    position:absolute;
+    top:254px;
+    left:392px;
+    width:230px;
+    height:28px;
+    background-color:black;
+    color:white;
+}
+
+

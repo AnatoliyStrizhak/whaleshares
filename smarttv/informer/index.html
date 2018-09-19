@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>informer</title>
+
+		<!-- TODO : Common API -->
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></script>
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
+
+		<!-- TODO : Javascript code -->
+		
+		<script language="javascript" type="text/javascript" src="app/javascript/Main.js"></script>
+
+		<!-- TODO : Style sheets code -->
+		<link rel="stylesheet" href="app/stylesheets/Main.css" type="text/css">
+
+		<!-- TODO: Plugins -->
+
+	</head>
+
+	<body onload="Main.onLoad();" onunload="Main.onUnload();">
+
+		<!-- Dummy anchor as focus for key events -->
+		<a href="javascript:void(0);" id="anchor" onkeydown="Main.keyDown();"></a>
+
+	<div id="wls"></div>
+	<div id="dt"></div>
+	<div id="vests"></div>
+	<div id="vpwr"></div>
+  	<div id="slider">&nbsp;</div>
+  	<div id="informer">&nbsp;</div>
+
+
+	<script type="text/javascript">
+
+var date = new Date();
+var day=date.getDate();
+var month=date.getMonth();
+var year=date.getFullYear();
+
+//document.getElementById("dt").innerHTML=day+"-"+month+"-"+year;
+
+</script>
+
+	
+	</body>
+</html>

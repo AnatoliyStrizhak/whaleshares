@@ -1,0 +1,25 @@
+{
+    "name": "goloschain/golos-php",
+    "description": "PHP client for connection to Graphene node (steem/golos)",
+    "keywords": ["Web Socket client for graphene node", "Graphene", "Steemit", "Golos"],
+    "homepage": "https://github.com/GolosChain/golos-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tkachew",
+            "email": "7tkachew@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.4 || ^7.0",
+        "textalk/websocket": "^1.2",
+        "bitwasp/secp256k1-php": "^0.1.2",
+        "stephenhill/base58": "^1.1",
+        "t3ran13/bytebuffer": "^1.0",
+        "fguillot/json-rpc": "@stable",
+        "t3ran13/php-graphene-node-client": "^5.0"
+    },
+    "autoload": {
+        "psr-4": { "GolosPHP\\": "" }
+    }
+}
