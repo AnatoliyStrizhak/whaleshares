@@ -1,86 +1,86 @@
 <?php
-require_once './simple_html_dom.php';
 
 if (isset($_REQUEST["usr"]) && $_REQUEST["usr"]!="")
 {
     $usr=$_REQUEST["usr"];
+    $limit=10;
+
+    if (isset($_REQUEST["limit"]) && $_REQUEST["limit"]!="")
+    {
+        $limit=$_REQUEST["limit"];
+    }
+
+    function truncate($text, $length) 
+    {
+        $length = abs((int)$length);
+        if(strlen($text) > $length) 
+        {
+            $text = preg_replace("/^(.{1,$length})(\s.*|$)/s", '\\1...', $text);
+        }
+        return($text);
+    }
+
 
     header('Content-type: text/xml;charset=UTF-8');
-    echo '<?xml version="1.0" encoding="UTF-8" ?>';
+    echo '<?xml version="1.0" encoding="UTF-8" ?>'; 
 ?>
 
     <rss version="2.0"
-        xmlns:content="http://purl.org/rss/1.0/modules/content/"
-        xmlns:wfw="http://wellformedweb.org/CommentAPI/"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:atom="http://www.w3.org/2005/Atom"
-        xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
-        xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
     >
 
 
     <channel>
-        <title>Whaleshares RSS feed</title>
-        <link>http://brehen-sobaken.ru/whaleshares/feed.php?usr=<?php echo $usr;?></link>
-        <description>Simple RSS feed for whaleshares.io</description>
-        <language>en</language>
+	<title>Whaleshares RSS feed</title>
+	<link>http://brehen-sobaken.ru/whaleshares/feed.php?usr=<?php echo $usr;?></link>
+	<atom:link href="http://brehen-sobaken.ru/whaleshares/feed.php?usr=<?php echo $usr;?>"  rel="self" type="application/rss+xml" />    
+	<description>Simple RSS feed for whaleshares.io</description>
+	<language>en</language>
 
 <?php
+    //Get last posts from each author I follow
+    $r=file_get_contents('https://api.whaleshares.io/rest2jsonrpc/database_api/get_discussions_by_feed?params=[{%22tag%22:%22'.$usr.'%22,%22limit%22:'.$limit.'}]');
 
-    $h = file_get_html("https://whaleshares.io/@".$usr."/feed");
-
-    $links=array();
-    $titles=array();
-    $dates=array();
-    $authors=array();
-    $bodys=array();
+    $res=json_decode($r,$assoc=true);
 
 
-    foreach( $h->find('.articles__h2 a') as $res)
+    foreach($res['result'] as $key=>$val)
     {
-        $link="https://whaleshares.io".$res->href;
-        array_push($links, $link);
 
-        array_push($titles, $res->plaintext);
-    }
+        $body=strip_tags($val["body"],"");
+        $link="http://whaleshares.io/@".$val["author"]."/".$val["permlink"];
 
-    foreach( $h->find('.updated') as $r)
-    {
-        array_push($dates, $r->title);
-    }
+        if($body!="")
+        {
 
-    foreach( $h->find('.author') as $a)
-    {
-        array_push($authors, $a->plaintext);
-    }
-
-    foreach( $h->find('.PostSummary__body') as $b)
-    {
-        array_push($bodys, $b->plaintext);
-    }
-
-
-    for($i=0; $i<count($authors); $i++)
-    {
 ?>
-        <item>
-        <title><![CDATA[<?php echo $titles[$i]; ?>]]></title>
-        <guid isPermaLink="true"><?php echo $links[$i]; ?></guid>
-        <dc:creator><![CDATA[<?php echo $authors[$i]; ?>]]></dc:creator>
-        <description><![CDATA[<?php echo $bodys[$i]; ?>]]></description>
-        <pubDate><?php echo date('r', strtotime($dates[$i])); ?></pubDate>
-        </item>
+
+    <item>
+    <title><![CDATA[<?php echo $val["title"]; ?>]]></title>
+    <guid isPermaLink="true"><?php echo $link; ?></guid>
+    <link><?php echo $link; ?></link>
+    <dc:creator><![CDATA[<?php echo $val["author"]; ?>]]></dc:creator>
+    <description><![CDATA[<?php echo $body; ?>]]></description>
+    <pubDate><?php echo $val["created"]; ?></pubDate>
+    </item>    
 
 <?php
+}
     }
 ?>
     </channel>
     </rss>
 <?php
+
+
 }
 else
 {
-    echo "<p>Dont forget to enter your Whaleshares login as url parameter. For example ?usr=astrizak</p>";
+    echo "Dont forget to enter your Whaleshares login as url parameter. For example ?usr=astrizak<p>By default limit of items in feed set to 10. If you want more just set &limit=20 param to url</p>";
 }
 ?>
-
