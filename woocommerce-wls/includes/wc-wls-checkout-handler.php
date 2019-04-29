@@ -34,12 +34,12 @@ class WC_WLS_Checkout_Handler {
         function add_checkout_script() {
         ?>
             <script type="text/javascript">
-            jQuery(document).on( "updated_checkout", function(){
+            //jQuery(document).on( "updated_checkout", function(){
 
-                jQuery("#place_order").click(function() {
-                    window.open('https://wallet.whaleshares.io', '_blank');
-                });
-            });
+            //    jQuery("#place_order").click(function() {
+            //        window.open('https://wallet.whaleshares.io', '_blank');
+            //    });
+            //});
 
         </script>
 

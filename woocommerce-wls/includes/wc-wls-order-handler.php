@@ -19,6 +19,7 @@ class WC_WLS_Order_Handler {
 
 		add_action('woocommerce_view_order', array($instance, 'payment_details'), 5);
 		add_action('woocommerce_thankyou', array($instance, 'payment_details'), 5);
+
 	}
 
 	public static function default_order_wls_status($status) {
@@ -33,14 +34,26 @@ class WC_WLS_Order_Handler {
 
 		<section class="woocommerce-wls-order-payment-details">
 
-			<h2 class="woocommerce-wls-order-payment-details__title"><?php _e( 'wls Payment details', 'wc-wls' ); ?></h2>
+			<h2 class="woocommerce-wls-order-payment-details__title"><?php _e( 'WLS Payment details', 'wc-wls' ); ?></h2>
 
-			<p class="woocommerce-wls-payment-memo-prompt"><em>If you haven't already completed your payment:</em> Please don't forget to include the <strong>"MEMO"</strong> when making a transfer for this transaction to wls.</p>
+                        <?php
+                            if(wc_order_get_wls_status($order_id)==='pending')
+                            {
+                        ?>
+			        <p class="woocommerce-wls-payment-memo-prompt">
+                                <strong>Now you must make a transfer through your Whaleshares.io wallet.</strong><br/>
+                                Please don't forget to include the <strong>"MEMO"</strong> for this transaction in Whaleshares.io wallet.
+                                Also double check <strong>"TO"</strong> and <strong>"AMOUNT"</strong> fields when making a transfer.
+                                <br/><br/><a href='https://wallet.whaleshares.io' target='_blank' class='button'>PAY through WHALSHARES.IO Wallet</a>
+                        <?php                     
+                            }
+                        ?>
+</p>
 			
 			<table class="woocommerce-table woocommerce-table--wls-order-payment-details shop_table wls_order_payment_details">
 				<tbody>
 					<tr>
-						<th><?php _e('Payee', 'wc-wls'); ?></th>
+						<th><?php _e('To', 'wc-wls'); ?></th>
 						<td><?php echo wc_order_get_wls_payee($order_id); ?></td>
 					</tr>
 					<tr>
