@@ -26,6 +26,7 @@ class WC_WLS_Order_Handler {
 		return $status ? $status : 'pending';
 	}
 
+
 	public static function payment_details($order_id) {
 		$order = wc_get_order($order_id);
 
@@ -41,28 +42,63 @@ class WC_WLS_Order_Handler {
                             {
                         ?>
 			        <p class="woocommerce-wls-payment-memo-prompt">
-                                <strong>Now you must make a transfer through your Whaleshares.io wallet.</strong><br/>
-                                Please don't forget to include the <strong>"MEMO"</strong> for this transaction in Whaleshares.io wallet.
-                                Also double check <strong>"TO"</strong> and <strong>"AMOUNT"</strong> fields when making a transfer.
-                                <br/><br/><a href='https://wallet.whaleshares.io' target='_blank' class='button'>PAY through WHALSHARES.IO Wallet</a>
-                        <?php                     
+                                <strong>Now you must make a transfer through your Whaleshares.io wallet.</strong><br/><br/>
+
+                                    Please don't forget to include the <strong>"MEMO"</strong> for this transaction in Whaleshares.io wallet.
+                                    Also double check <strong>"TO"</strong> and <strong>"AMOUNT"</strong> fields when making a transfer.
+                                    <br/><br/><a href="https://wallet.whaleshares.io" id='paybutton' class='button' target='_blank'>PAY through WHALSHARES.IO Wallet</a>
+                                </p>
+
+                                <script type="text/javascript">
+                                if (window.whalevault) {
+                                    function hidebutton()
+                                    {
+                                        jQuery("#forwhalevault").hide();
+                                    }
+
+
+                                    window.whalevault.requestHandshake("appId", function(response) {
+
+                                        jQuery(".woocommerce-wls-payment-memo-prompt").html('<strong>After clicking "PAY through WhaleVault" button you must "CONFIRM" a transfer in your WhaleVault extension.<br/>Double check all transfer parametrs before confirming.</strong><br/><br/><span id="forwhalevault">Enter your Whaleshares username without @<br/><input type="text" id="username"><br/><br/><a href="javascript:void(0);" id="paybutton" class="button" >PAY through WhaleVault</a></span>');
+
+                                        jQuery("#paybutton").click(function() {
+
+                                            var ops = [ 
+                                            ['transfer', 
+                                             { from: jQuery("#username").val(), 
+                                                to: '<?php echo wc_order_get_wls_payee($order_id); ?>', 
+                                                amount: '<?php echo number_format(wc_order_get_wls_amount($order_id), 3, '.', ''); ?> WLS', 
+                                                memo: '<?php echo wc_order_get_wls_memo($order_id); ?>'
+                                             }
+                                            ]
+                                            ];
+
+                                            whalevault.requestSignBuffer('woocommerce_wls', 'wls:'+jQuery("#username").val(), { url: 'https://pubrpc.whaleshares.io', operations: ops }, 'Active', 'transfer', 'tx', function(response) { hidebutton(); });
+                                        });
+                                    });
+                                }
+                                </script>
+
+
+                        <?php
                             }
                         ?>
-</p>
+
+
 			
 			<table class="woocommerce-table woocommerce-table--wls-order-payment-details shop_table wls_order_payment_details">
 				<tbody>
 					<tr>
 						<th><?php _e('To', 'wc-wls'); ?></th>
-						<td><?php echo wc_order_get_wls_payee($order_id); ?></td>
+						<td id='to'><?php echo wc_order_get_wls_payee($order_id); ?></td>
 					</tr>
 					<tr>
 						<th><?php _e('Memo', 'wc-wls'); ?></th>
-						<td><?php echo wc_order_get_wls_memo($order_id); ?></td>
+						<td id='memo'><?php echo wc_order_get_wls_memo($order_id); ?></td>
 					</tr>
 					<tr>
 						<th><?php _e('Amount', 'wc-wls'); ?></th>
-						<td><?php echo wc_order_get_wls_amount($order_id); ?></td>
+						<td id='amount'><?php echo wc_order_get_wls_amount($order_id); ?></td>
 					</tr>
 					<tr>
 						<th><?php _e('Currency', 'wc-wls'); ?></th>
