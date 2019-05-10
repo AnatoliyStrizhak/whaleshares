@@ -326,7 +326,7 @@ class WC_Gateway_WLS extends WC_Payment_Gateway {
 	 */
 	public function validate_fields() {
 
-		$amount_currency = isset($_POST[$this->field_id('amount_currency')]) ? $_POST[$this->field_id('amount_currency')] : 'wls';
+		$amount_currency = 'WLS';
 		$from_currency_symbol = wc_wls_get_base_fiat_currency();
 		
 		WC_WLS::set_from_currency($from_currency_symbol);
